@@ -68,4 +68,16 @@ public extension SimpleMultiplicativeArithmetic {
     static func /= (lhs: inout Self, rhs: Self) {
         lhs = lhs / rhs
     }
+    
+public extension Int: MultiplicativeArithmetic {
+        
+    }
+    
+public extension Double: MultiplicativeArithmetic {
+        
+    }
+    
+public extension Float: MultiplicativeArithmetic {
+        
+    }
 }
