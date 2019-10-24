@@ -80,4 +80,8 @@ public extension Double: MultiplicativeArithmetic {
 public extension Float: MultiplicativeArithmetic {
         
     }
+    
+public extension UInt: MultiplicativeArithmetic{
+        
+    }
 }
