@@ -1,6 +1,6 @@
 //
-//  Mandelbrot Generation.swift
-//  Mandelplay
+//  MultiplicativeArithmetic.swift
+//  MultiplicativeArithmetic
 //
 //  Created by Ben Leggiero on 2019-10-23.
 //  Copyright © 2019 Ben Leggiero BH-1-PS
