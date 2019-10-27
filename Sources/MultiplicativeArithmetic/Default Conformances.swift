@@ -30,3 +30,7 @@ extension UInt8: MultiplicativeArithmetic {}
 extension UInt16: MultiplicativeArithmetic {}
 extension UInt32: MultiplicativeArithmetic {}
 extension UInt64: MultiplicativeArithmetic {}
+
+
+
+extension Decimal: MultiplicativeArithmetic {}
