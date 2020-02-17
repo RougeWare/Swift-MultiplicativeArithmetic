@@ -7,13 +7,16 @@
 //
 
 import Foundation
+import CoreGraphics
 
 
 
 extension CGFloat: MultiplicativeArithmetic {}
 extension Float32: MultiplicativeArithmetic {}
 extension Float64: MultiplicativeArithmetic {}
+#if (arch(i386) || arch(x86_64)) && !os(Windows)
 extension Float80: MultiplicativeArithmetic {}
+#endif
 
 
 
