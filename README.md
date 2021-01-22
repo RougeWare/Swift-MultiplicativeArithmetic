@@ -1,3 +1,3 @@
-# MultiplicativeArithmetic
+# `MultiplicativeArithmetic` #
 
-A description of this package.
+Swift's standard library includes `AdditiveArithmetic`, but not `MultiplicativeArithmetic`. So I made one!
