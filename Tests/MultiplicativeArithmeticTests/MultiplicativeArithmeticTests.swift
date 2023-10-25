@@ -1,14 +1,17 @@
 import XCTest
-@testable import MultiplicativeArithmetic
+import MultiplicativeArithmetic
 
 
 
 final class MultiplicativeArithmeticTests: XCTestCase {
-    func testNothing() {
-        // I don't think there's anything to test 🤔
+    
+    func testSugar() {
+        XCTAssertEqual(sqrt(7.5), 7.5.sqrt())
+        XCTAssertEqual(Foundation.sqrt(7.5), sqrt<Double>(7.5))
     }
-
+    
+    
     static var allTests = [
-        ("testNothing", testNothing),
+        ("testSugar", testSugar),
     ]
 }

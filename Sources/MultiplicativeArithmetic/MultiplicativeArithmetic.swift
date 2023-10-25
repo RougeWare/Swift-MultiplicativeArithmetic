@@ -64,14 +64,13 @@ public protocol MultiplicativeArithmetic {
     ///
     /// - SeeAlso: [Square root – Wikipedia](https://en.wikipedia.org/wiki/Square_root#Computation)
     ///
-    /// - Parameters:
-    ///   - x: The number whose square root to find
-    ///
-    /// - Returns: √x
+    /// - Returns: √self
     func sqrt() -> Self
 }
 
 
+
+// MARK: - Simplificatino
 
 /// A version of `MultiplicativeArithmetic` which is simpler to implement since some of it is synthesized
 public protocol SimpleMultiplicativeArithmetic: MultiplicativeArithmetic {
@@ -91,3 +90,18 @@ public extension SimpleMultiplicativeArithmetic {
         lhs = lhs / rhs
     }
 }
+
+
+
+// MARK: - Sugar
+
+/// Takes the square root of the given number
+///
+/// - SeeAlso: [Square root – Wikipedia](https://en.wikipedia.org/wiki/Square_root#Computation)
+///
+/// - Parameters:
+///   - x: The number whose square root to find
+///
+/// - Returns: √x
+@inline(__always)
+public func sqrt<Value: MultiplicativeArithmetic>(_ x: Value) -> Value { x.sqrt() }
