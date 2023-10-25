@@ -62,6 +62,10 @@ extension UInt64: MultiplicativeArithmetic {}
 
 // MARK: - big decimal
 
+let numIterationsToConvergence: UInt8 = 6
+
+
+
 extension Decimal: MultiplicativeArithmetic {
     
     /// - Attention: Because of how Decimal is implemented in Swift's `Foundation` library, this first rounds `exponent` to an integer before exponentiating
@@ -76,9 +80,7 @@ extension Decimal: MultiplicativeArithmetic {
             return .quietNaN
         }
         
-        let NUM_ITERATIONS_TO_CONVERGENCE = 6
-        
-        return (0 ..< NUM_ITERATIONS_TO_CONVERGENCE).reduce(into: (self + 1) / 2) { guess, _ in
+        return (0 ..< numIterationsToConvergence).reduce(into: (self + 1) / 2) { guess, _ in
             guess = ((self / guess) + guess) / 2
             // deliberately ignore ObjC exceptions and assume the last guess is good enough
         }
