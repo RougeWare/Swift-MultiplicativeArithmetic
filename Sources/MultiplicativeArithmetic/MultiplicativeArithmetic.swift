@@ -2,8 +2,7 @@
 //  MultiplicativeArithmetic.swift
 //  MultiplicativeArithmetic
 //
-//  Created by Ben Leggiero on 2019-10-23.
-//  Copyright © 2019 Ben Leggiero BH-1-PS
+//  Created by Ky Leggiero on 2019-10-23
 //
 
 
@@ -47,6 +46,29 @@ public protocol MultiplicativeArithmetic {
     ///   - lhs: The dividend. On return, the quotient.
     ///   - rhs: The divisor
     static func /= (lhs: inout Self, rhs: Self)
+    
+    
+    /// Raises the given base to the given power.
+    ///
+    /// - SeeAlso: [Exponentiation – Wikipedia](https://en.wikipedia.org/wiki/Exponentiation#In_programming_languages)
+    ///
+    /// - Parameters:
+    ///   - base:     The number to multiply by itself `exponent` number of times
+    ///   - exponent: The number of times to multiply `base` by itself
+    ///
+    /// - Returns: `base ^ exponent`
+    func pow(_ exponent: Self) -> Self
+    
+    
+    /// Takes the square root of the given number
+    ///
+    /// - SeeAlso: [Square root – Wikipedia](https://en.wikipedia.org/wiki/Square_root#Computation)
+    ///
+    /// - Parameters:
+    ///   - x: The number whose square root to find
+    ///
+    /// - Returns: √x
+    func sqrt() -> Self
 }
 
 
