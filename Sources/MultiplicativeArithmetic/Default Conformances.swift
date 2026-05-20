@@ -5,31 +5,52 @@
 //  Created by Ky Leggiero on 2019-10-26
 //
 
-import Foundation
+#if canImport(CoreGraphics)
 import CoreGraphics
+#endif
+import Foundation
+
+#if canImport(Darwin)
+import Darwin
+private let _pow:  (Double, Double) -> Double = Darwin.pow
+private let _powf: (Float,  Float)  -> Float  = Darwin.powf
+private let _powl: (Float80, Float80) -> Float80 = Darwin.powl
+#elseif canImport(Glibc)
+import Glibc
+private let _pow:  (Double, Double) -> Double = Glibc.pow
+private let _powf: (Float,  Float)  -> Float  = Glibc.powf
+private let _powl: (Float80, Float80) -> Float80 = Glibc.powl
+#elseif canImport(Musl)
+import Musl
+private let _pow:  (Double, Double) -> Double = Musl.pow
+private let _powf: (Float,  Float)  -> Float  = Musl.powf
+private let _powl: (Float80, Float80) -> Float80 = Musl.powl
+#endif
 
 
 
 // MARK: floating-point
 
+private typealias NativeFloat = CGFloat.NativeType
+
 public extension FloatingPoint where Self: MultiplicativeArithmetic {
-    func sqrt() -> Self { CoreGraphics.sqrt(self) }
+    func sqrt() -> Self { squareRoot() }
 }
 
 
 
 extension CGFloat: MultiplicativeArithmetic {
-    public func pow(_ exponent: Self) -> Self { CoreGraphics.pow(self, exponent) }
+    public func pow(_ exponent: Self) -> Self { Self(_pow(NativeFloat(self), NativeFloat(exponent))) }
 }
 extension Float32: MultiplicativeArithmetic {
-    public func pow(_ exponent: Self) -> Self { CoreGraphics.pow(self, exponent) }
+    public func pow(_ exponent: Self) -> Self { Self(_powf(self, exponent)) }
 }
 extension Float64: MultiplicativeArithmetic {
-    public func pow(_ exponent: Self) -> Self { CoreGraphics.pow(self, exponent) }
+    public func pow(_ exponent: Self) -> Self { Self(_pow(self, exponent)) }
 }
 #if (arch(i386) || arch(x86_64)) && !os(Windows)
 extension Float80: MultiplicativeArithmetic {
-    public func pow(_ exponent: Self) -> Self { CoreGraphics.pow(self, exponent) }
+    public func pow(_ exponent: Self) -> Self { Self(_powl(self, exponent)) }
 }
 #endif
 
@@ -38,8 +59,8 @@ extension Float80: MultiplicativeArithmetic {
 // MARK: - integers
 
 public extension BinaryInteger where Self: MultiplicativeArithmetic {
-    func pow(_ exponent: Self) -> Self { .init(CoreGraphics.pow(CGFloat(self), CGFloat(exponent))) }
-    func sqrt() -> Self { .init(CoreGraphics.sqrt(CGFloat(self))) }
+    func pow(_ exponent: Self) -> Self { .init(_pow(NativeFloat(self), NativeFloat(exponent))) }
+    func sqrt() -> Self { .init(NativeFloat(self).squareRoot()) }
 }
 
 
@@ -70,7 +91,11 @@ extension Decimal: MultiplicativeArithmetic {
     
     /// - Attention: Because of how Decimal is implemented in Swift's `Foundation` library, this first rounds `exponent` to an integer before exponentiating
     public func pow(_ exponent: Self) -> Self {
+        #if canImport(ObjectiveC)
         Foundation.pow(self, Int(truncating: NSDecimalNumber(decimal: exponent).rounding(accordingToBehavior: .halfUp)))
+        #else
+        Foundation.pow(self, Int(NSDecimalNumber(decimal: exponent).doubleValue.rounded(.toNearestOrAwayFromZero)))
+        #endif
     }
     
     
@@ -89,6 +114,7 @@ extension Decimal: MultiplicativeArithmetic {
 
 
 
+#if canImport(ObjectiveC)
 private final class RoundHalfUpDecimalBehavior: NSDecimalNumberBehaviors {
     func roundingMode() -> NSDecimalNumber.RoundingMode { .plain }
     
@@ -132,10 +158,4 @@ private final class RoundHalfUpDecimalBehavior: NSDecimalNumberBehaviors {
 private extension NSDecimalNumberBehaviors where Self == RoundHalfUpDecimalBehavior {
     static var halfUp: Self { Self() }
 }
-
-
-
-private final class NoError: NSException {
-    init() { super.init(name: NSExceptionName("NoError"), reason: nil) }
-    required init?(coder: NSCoder) { super.init(coder: coder) }
-}
+#endif
