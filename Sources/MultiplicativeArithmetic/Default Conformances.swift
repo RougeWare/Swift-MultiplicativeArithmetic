@@ -11,20 +11,26 @@ import CoreGraphics
 import Foundation
 
 #if canImport(Darwin)
-import Darwin
-private let _pow:  (Double, Double) -> Double = Darwin.pow
-private let _powf: (Float,  Float)  -> Float  = Darwin.powf
-private let _powl: (Float80, Float80) -> Float80 = Darwin.powl
+    import Darwin
+    private let _pow:  (Double, Double) -> Double = Darwin.pow
+    private let _powf: (Float,  Float)  -> Float  = Darwin.powf
+    #if (arch(i386) || arch(x86_64)) && !os(Windows)
+        private let _powl: (Float80, Float80) -> Float80 = Darwin.powl
+    #endif
 #elseif canImport(Glibc)
-import Glibc
-private let _pow:  (Double, Double) -> Double = Glibc.pow
-private let _powf: (Float,  Float)  -> Float  = Glibc.powf
-private let _powl: (Float80, Float80) -> Float80 = Glibc.powl
+    import Glibc
+    private let _pow:  (Double, Double) -> Double = Glibc.pow
+    private let _powf: (Float,  Float)  -> Float  = Glibc.powf
+    #if (arch(i386) || arch(x86_64)) && !os(Windows)
+        private let _powl: (Float80, Float80) -> Float80 = Glibc.powl
+    #endif
 #elseif canImport(Musl)
-import Musl
-private let _pow:  (Double, Double) -> Double = Musl.pow
-private let _powf: (Float,  Float)  -> Float  = Musl.powf
-private let _powl: (Float80, Float80) -> Float80 = Musl.powl
+    import Musl
+    private let _pow:  (Double, Double) -> Double = Musl.pow
+    private let _powf: (Float,  Float)  -> Float  = Musl.powf
+    #if (arch(i386) || arch(x86_64)) && !os(Windows)
+        private let _powl: (Float80, Float80) -> Float80 = Musl.powl
+    #endif
 #endif
 
 
